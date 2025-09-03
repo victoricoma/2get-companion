@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
+import Banner from './Banner';
 
 type Msg = { from: 'user' | 'ai', text: string };
 
@@ -25,17 +26,24 @@ export default function Chat() {
     setInput('');
     setLoading(true);
     try {
+      const payload: any = { message: text };
+      if (threadId && threadId.startsWith('thread_')) {
+        payload.threadId = threadId;
+      }
+
       const r = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, threadId }),
+        body: JSON.stringify(payload),
       });
       const data = await r.json();
 
       if (!r.ok) throw new Error(data?.error || 'Erro');
-      if (data.threadId) setThreadId(data.threadId);
-      if (data.threadId && !threadId) setThreadId(data.threadId);
-      if (data.text) setMsgs(m => [...m, { from: 'ai', text: data.text }]);
+
+      if (data.threadId && data.threadId.startsWith('thread_')) {
+        setThreadId(data.threadId);
+      }
+
     } catch (err: any) {
       setMsgs(m => [...m, { from: 'ai', text: `Falhou: ${err.message}` }]);
     } finally {
@@ -47,6 +55,7 @@ export default function Chat() {
 
   return (
     <div className="card" style={{ width: 'min(820px, 95vw)' }}>
+      <Banner />
       <h1>Chat do Assistant</h1>
 
       <div style={{ height: 360, overflow: 'auto', padding: 8, border: '1px solid #2a3357', borderRadius: 10, marginBottom: 12 }}>

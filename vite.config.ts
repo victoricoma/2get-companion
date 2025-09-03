@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:8787'
+      '/api': 'https://agente-2get--app-2get.us-central1.hosted.app'
     }
   },
 });

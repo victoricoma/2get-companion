@@ -3,6 +3,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { Link, useNavigate } from "react-router-dom";
+import Banner from "./Banner";
 
 
 export default function Profile() {
@@ -27,6 +28,7 @@ export default function Profile() {
 
     return (
         <div className="card" style={{width: "80%", maxWidth: 1090, margin: "auto",  }}>
+            <Banner />
             <h1>Ficha e Usuário</h1>
             <img src={user.photoURL || "https://via.placeholder.com/120"} alt="avatar" className="avatar" />
             <div className="grid">
