@@ -1,0 +1,21 @@
+{
+    "analise": "Olá! Bem-vindo(a) ao espaço de mediação familiar. Estou aqui para ajudar a construir rotinas afetivas que aproximem pais, cuidadores e crianças ou adolescentes, respeitando as necessidades emocionais e os limites de cada geração.",
+    "rotina_de_atividades": [
+        {
+            "nome": "Conversas Diárias de Check-in",
+            "descricao": "Reserve 10 minutos diários para que cada membro compartilhe como se sente, o que gostou e se algo o incomodou no dia.",
+            "justificativa": "Essa prática fortalece o vínculo de apego ao proporcionar um espaço seguro para a expressão das emoções (Bowlby) e respeita o equilíbrio entre proximidade e distância saudável (Schopenhauer/Karnal)."
+        },
+        {
+            "nome": "Atividades em Duplas Mistas",
+            "descricao": "Organize atividades semanais onde um adulto e uma criança/adolescente realizem juntos uma atividade lúdica ou prática (ex: cozinhar, jardinagem).",
+            "justificativa": "Promove a colaboração intergeracional e cria oportunidades de confiança e respeito mútuo, fomentando a segurança emocional."
+        }
+    ],
+    "orientacoes_personalizadas": "Para melhor personalização, informe a composição familiar, idades e rotina atual, assim poderemos ajustar as atividades para se encaixarem no cotidiano e cultura de vocês.",
+    "proposito_teorico": "As atividades propostas buscam fortalecer o apego seguro reforçando momentos de segurança emocional (Bowlby) enquanto respeitam a necessidade de espaço pessoal para evitar conflitos, conforme o dilema do porco-espinho (Schopenhauer/Karnal), facilitando a conexão genuína e saudável entre gerações.",
+    "referencias": [
+        "Bowlby, J., 'Apego: A Natureza do Vínculo'",
+        "Karnal, L. (2018), 'Schopenhauer e os Porcos-Espinhos'"
+    ]
+}
