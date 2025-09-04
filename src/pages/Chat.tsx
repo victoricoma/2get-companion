@@ -1,89 +1,110 @@
-import { useEffect, useState } from 'react';
-import type { FormEvent } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase/firebase';
-import Banner from './Banner';
+import { useEffect, useRef, useState } from "react";
+import Banner from "./Banner";
+import Badge from 'react-bootstrap/Badge';
 
-type Msg = { from: 'user' | 'ai', text: string };
+type Msg = { id: string; role: "user" | "assistant" | "system"; text: string };
+
+const API_URL = "https://2get.icoma.com.br/api/chat";
 
 export default function Chat() {
-  const [ready, setReady] = useState(false);
+  const [messages, setMessages] = useState<Msg[]>([]);
+  const [input, setInput] = useState("");
   const [threadId, setThreadId] = useState<string | null>(null);
-  const [input, setInput] = useState('');
-  const [msgs, setMsgs] = useState<Msg[]>([]);
   const [loading, setLoading] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => setReady(!!u));
-    return () => unsub();
-  }, []);
+    listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages]);
 
-  const send = async (e: FormEvent) => {
-    e.preventDefault();
+  async function sendMessage() {
     const text = input.trim();
-    if (!text) return;
-    setMsgs(m => [...m, { from: 'user', text }]);
-    setInput('');
+    if (!text || loading) return;
+
+    const userMsg: Msg = { id: crypto.randomUUID(), role: "user", text };
+    setMessages(prev => [...prev, userMsg]);
+    setInput("");
     setLoading(true);
+
     try {
       const payload: any = { message: text };
-      if (threadId && threadId.startsWith('thread_')) {
-        payload.threadId = threadId;
-      }
+      if (threadId?.startsWith("thread_")) payload.threadId = threadId;
 
-      const r = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const r = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const data = await r.json();
 
-      if (!r.ok) throw new Error(data?.error || 'Erro');
+      const data = await r.json().catch(() => ({} as any));
+      if (!r.ok) throw new Error(data?.error || "Falha na API");
 
-      if (data.threadId && data.threadId.startsWith('thread_')) {
-        setThreadId(data.threadId);
-      }
+      if (data?.threadId?.startsWith("thread_")) setThreadId(data.threadId);
 
-    } catch (err: any) {
-      setMsgs(m => [...m, { from: 'ai', text: `Falhou: ${err.message}` }]);
+      const assistantText = (data?.text ?? "").toString();
+      const assistantMsg: Msg = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        text: assistantText || "[sem texto]",
+      };
+      setMessages(prev => [...prev, assistantMsg]);
+    } catch (e: any) {
+      const errMsg: Msg = { id: crypto.randomUUID(), role: "system", text: `Erro: ${e.message || e}` };
+      setMessages(prev => [...prev, errMsg]);
     } finally {
       setLoading(false);
     }
-  };
-
-  if (!ready) return <div className="center">Carregando...</div>;
+  }
+  function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }
 
   return (
-    <div className="card" style={{ width: 'min(820px, 95vw)' }}>
+    <div className="card" style={{ width: 'min(920px, 108vw)' }}>
       <Banner />
-      <h1>Chat do Assistant</h1>
-
-      <div style={{ height: 360, overflow: 'auto', padding: 8, border: '1px solid #2a3357', borderRadius: 10, marginBottom: 12 }}>
-        {msgs.map((m, i) => (
-          <div key={i} style={{ margin: '8px 0', textAlign: m.from === 'user' ? 'right' : 'left' }}>
-            <div style={{
-              display: 'inline-block',
-              padding: '8px 12px',
-              borderRadius: 12,
-              background: m.from === 'user' ? '#1a2250' : '#0f1430',
-              border: '1px solid #2a3357'
-            }}>
+      <h2 className="text-xl font-semibold mb-3 text-slate-200">Chat do Assistant</h2>
+      <div
+        ref={listRef}
+        style={{ height: 360, overflow: 'auto', padding: 8, border: '1px solid #2a3357', borderRadius: 10, marginBottom: 12 }}
+      >
+        {messages.map((m) => (
+          <Badge bg="secondary"
+            key={m.id}
+            className={`mb-3 flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+          >
+            <div
+              className={`max-w-[75%] whitespace-pre-wrap px-3 py-2 rounded-2xl text-sm leading-relaxed
+                ${m.role === "user" ? "bg-blue-600 text-white" :
+                  m.role === "assistant" ? "bg-slate-700 text-slate-100" :
+                    "bg-amber-100 text-amber-900"}`}
+            >
               {m.text}
+              {m.role === "assistant" && m.text}
             </div>
-          </div>
+          </Badge>
         ))}
-        {loading && <div className="center">Gerando resposta…</div>}
+        {loading && <div className="text-xs text-slate-400">Gerando sua resposta...</div>}
       </div>
 
-      <form onSubmit={send} className="form" style={{ display: 'flex', gap: 8 }}>
+      <div style={{ display: 'flex', gap: 8 }}>
         <input
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKey}
           placeholder="Digite sua mensagem…"
           style={{ flex: 1 }}
         />
-        <button type="submit" disabled={loading}>Enviar</button>
-      </form>
+        <button
+          onClick={sendMessage}
+          disabled={loading || !input.trim()}
+          className="px-4 py-2 rounded-lg bg-blue-600 text-white disabled:opacity-50"
+        >
+          Enviar
+        </button>
+      </div>
     </div>
   );
 }
