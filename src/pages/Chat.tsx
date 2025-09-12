@@ -62,31 +62,85 @@ export default function Chat() {
     }
   }
 
+  function ThreadDisplay({ data }: { data: any }) {
+    return (
+      <div className="space-y-3">
+        {data.analise && (
+          <div>
+            <strong>Análise:</strong>
+            <p className="whitespace-pre-wrap">{data.analise}</p>
+          </div>
+        )}
+        {Array.isArray(data.rotina_de_atividades) && data.rotina_de_atividades.length > 0 && (
+          <div>
+            <strong>Rotina de atividades:</strong>
+            <ul className="list-disc pl-5">
+              {data.rotina_de_atividades.map((item: string, i: number) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {data.orientacoes_personalizadas && (
+          <div>
+            <strong>Orientações:</strong>
+            <p className="whitespace-pre-wrap">{data.orientacoes_personalizadas}</p>
+          </div>
+        )}
+        {data.proposito_teorico && (
+          <div>
+            <strong>Propósito teórico:</strong>
+            <p className="whitespace-pre-wrap">{data.proposito_teorico}</p>
+          </div>
+        )}
+        {Array.isArray(data.referencias) && data.referencias.length > 0 && (
+          <div>
+            <strong>Referências:</strong>
+            <ul className="list-disc pl-5">
+              {data.referencias.map((ref: string, i: number) => (
+                <li key={i}>{ref}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  }
+  const parseThread = (text: string) => {
+    try {
+      const obj = JSON.parse(text);
+      // cheque se tem pelo menos uma das chaves esperadas
+      if (obj && typeof obj === 'object' && ('analise' in obj || 'rotina_de_atividades' in obj)) {
+        return obj;
+      }
+    } catch (e) {
+      // não é JSON válido
+    }
+    return null;
+  };
+
   return (
     <div className="card" style={{ width: 'min(920px, 108vw)' }}>
       <Banner />
       <h2 className="text-xl font-semibold mb-3 text-slate-200">Chat do Assistant</h2>
-      <div
-        ref={listRef}
-        style={{ height: 360, overflow: 'auto', padding: 8, border: '1px solid #2a3357', borderRadius: 10, marginBottom: 12 }}
-      >
-        {messages.map((m) => (
-          <Badge bg="secondary"
-            key={m.id}
-            className={`mb-3 flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-          >
-            <div
-              className={`max-w-[75%] whitespace-pre-wrap px-3 py-2 rounded-2xl text-sm leading-relaxed
+      <div ref={listRef} style={{ height: 360, overflow: 'auto', padding: 8, border: '1px solid #2a3357', borderRadius: 10, marginBottom: 12 }}>
+        {messages.map((m) => {
+          const threadData = m.role === 'assistant' ? parseThread(m.text) : null;
+          return (
+            <Badge bg="secondary"
+              key={m.id}
+              className={`mb-3 flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+            >
+              <div className={`max-w-[75%] whitespace-pre-wrap px-3 py-2 rounded-2xl text-sm leading-relaxed
                 ${m.role === "user" ? "bg-blue-600 text-white" :
                   m.role === "assistant" ? "bg-slate-700 text-slate-100" :
-                    "bg-amber-100 text-amber-900"}`}
-            >
-              {m.text}
-              {m.role === "assistant" && m.text}
-            </div>
-          </Badge>
-        ))}
-        {loading && <div className="text-xs text-slate-400">Gerando sua resposta...</div>}
+                    "bg-amber-100 text-amber-900"}`}>
+                {threadData ? <ThreadDisplay data={threadData} /> : m.text}
+              </div>
+            </Badge>
+          );
+        })}
+        {loading && <div className="text-xs text-slate-400">Gerando sua resposta…</div>}
       </div>
 
       <div style={{ display: 'flex', gap: 8 }}>
