@@ -6,6 +6,10 @@ type Msg = { id: string; role: "user" | "assistant" | "system"; text: string };
 
 const API_URL = "https://2get.icoma.com.br/api/chat";
 
+type Atividade =
+  | string
+  | { nome?: string; descricao?: string; justificativa?: string; [key: string]: any };
+
 export default function Chat() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -55,6 +59,7 @@ export default function Chat() {
       setLoading(false);
     }
   }
+
   function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -62,7 +67,19 @@ export default function Chat() {
     }
   }
 
+  const parseThread = (text: string) => {
+    try {
+      const obj = JSON.parse(text);
+      if (obj && typeof obj === "object" && ("analise" in obj || "rotina_de_atividades" in obj)) {
+        return obj;
+      }
+    } catch {
+    }
+    return null;
+  };
+
   function ThreadDisplay({ data }: { data: any }) {
+    const hasRotina = Array.isArray(data.rotina_de_atividades) && data.rotina_de_atividades.length > 0;
     return (
       <div className="space-y-3">
         {data.analise && (
@@ -71,29 +88,44 @@ export default function Chat() {
             <p className="whitespace-pre-wrap">{data.analise}</p>
           </div>
         )}
-        {Array.isArray(data.rotina_de_atividades) && data.rotina_de_atividades.length > 0 && (
+        {hasRotina && (
           <div>
             <strong>Rotina de atividades:</strong>
-            <ul className="list-disc pl-5">
-              {data.rotina_de_atividades.map((item: string, i: number) => (
-                <li key={i}>{item}</li>
-              ))}
+            <ul className="list-disc pl-5 space-y-1">
+              {data.rotina_de_atividades.map((item: Atividade, i: number) => {
+                if (typeof item === "string") {
+                  return <li key={i}>{item}</li>;
+                }
+                if (item && typeof item === "object") {
+                  return (
+                    <li key={i}>
+                      {item.nome && <div><strong>{item.nome}</strong></div>}
+                      {item.descricao && <div className="whitespace-pre-wrap">{item.descricao}</div>}
+                      {item.justificativa && (
+                        <div className="text-xs opacity-80 whitespace-pre-wrap">Justificativa: {item.justificativa}</div>
+                      )}
+                    </li>
+                  );
+                }
+                return <li key={i}>[Atividade inválida]</li>;
+              })}
             </ul>
           </div>
         )}
-        {data.orientacoes_personalizadas && (
+        {/* Outras seções só aparecem quando há rotina */}
+        {hasRotina && data.orientacoes_personalizadas && (
           <div>
             <strong>Orientações:</strong>
             <p className="whitespace-pre-wrap">{data.orientacoes_personalizadas}</p>
           </div>
         )}
-        {data.proposito_teorico && (
+        {hasRotina && data.proposito_teorico && (
           <div>
             <strong>Propósito teórico:</strong>
             <p className="whitespace-pre-wrap">{data.proposito_teorico}</p>
           </div>
         )}
-        {Array.isArray(data.referencias) && data.referencias.length > 0 && (
+        {hasRotina && Array.isArray(data.referencias) && data.referencias.length > 0 && (
           <div>
             <strong>Referências:</strong>
             <ul className="list-disc pl-5">
@@ -106,18 +138,6 @@ export default function Chat() {
       </div>
     );
   }
-  const parseThread = (text: string) => {
-    try {
-      const obj = JSON.parse(text);
-      // cheque se tem pelo menos uma das chaves esperadas
-      if (obj && typeof obj === 'object' && ('analise' in obj || 'rotina_de_atividades' in obj)) {
-        return obj;
-      }
-    } catch (e) {
-      // não é JSON válido
-    }
-    return null;
-  };
 
   return (
     <div className="card" style={{ width: 'min(920px, 108vw)' }}>
@@ -127,14 +147,20 @@ export default function Chat() {
         {messages.map((m) => {
           const threadData = m.role === 'assistant' ? parseThread(m.text) : null;
           return (
-            <Badge bg="secondary"
+            <Badge
+              bg="secondary"
               key={m.id}
-              className={`mb-3 flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+              className={`mb-3 flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className={`max-w-[75%] whitespace-pre-wrap px-3 py-2 rounded-2xl text-sm leading-relaxed
-                ${m.role === "user" ? "bg-blue-600 text-white" :
-                  m.role === "assistant" ? "bg-slate-700 text-slate-100" :
-                    "bg-amber-100 text-amber-900"}`}>
+              <div
+                className={`max-w-[75%] whitespace-pre-wrap px-3 py-2 rounded-2xl text-sm leading-relaxed ${
+                  m.role === 'user'
+                    ? 'bg-blue-600 text-white'
+                    : m.role === 'assistant'
+                    ? 'bg-slate-700 text-slate-100'
+                    : 'bg-amber-100 text-amber-900'
+                }`}
+              >
                 {threadData ? <ThreadDisplay data={threadData} /> : m.text}
               </div>
             </Badge>
@@ -142,7 +168,6 @@ export default function Chat() {
         })}
         {loading && <div className="text-xs text-slate-400">Gerando sua resposta…</div>}
       </div>
-
       <div style={{ display: 'flex', gap: 8 }}>
         <input
           value={input}
