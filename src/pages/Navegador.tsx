@@ -1,0 +1,36 @@
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+export default function Navegador() {
+
+return (
+<>
+    <Navbar expand="lg" className="mb-3" bg="dark" variant="dark">
+      <Container>
+        <Navbar.Brand>
+        <img src="vite.svg" width="60" height="60" alt="2Get Companion" />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="#home">Infográfico</Nav.Link>
+            <Nav.Link href="#link">Quem é a turma</Nav.Link>
+            <NavDropdown title="Teoria base" id="basic-nav-dropdown">
+              <NavDropdown.Item href="#action/3.1">Jhon Bowlby (Teoria do Apego)</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">
+                Arthur de Schopenhauer (Paradigma do Porco Espinho)
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Machine Learning</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">
+                Onde armezenamos nosso conhecimento?
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+</>
+);
+}
