@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import type { User} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth } from ".././firebase/firebase";
+import { auth } from "../firebase/firebase";
 
 
 export default function AuthGuard({ children }: { children: ReactNode }) {

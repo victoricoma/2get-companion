@@ -2,14 +2,19 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Auth from "../service/Auth";
+
+
 export default function Navegador() {
+
+  const currentUser = Auth();
 
 return (
 <>
     <Navbar expand="lg" className="mb-3" bg="dark" variant="dark">
       <Container>
         <Navbar.Brand>
-        <img src="vite.svg" width="60" height="60" alt="2Get Companion" />
+        <img src={currentUser?.photoURL || "https://via.placeholder.com/120"} width="60" height="60" alt="2Get Companion" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

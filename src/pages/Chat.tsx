@@ -6,10 +6,13 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Navegador from "./Navegador";
+import chatFace from '../../public/Chat Face.png';
+import Auth from "../service/Auth";
 
 type Msg = { id: string; role: "user" | "assistant" | "system"; text: string };
 
 const API_URL = "https://2get.icoma.com.br/api/chat";
+
 
 type Atividade =
   | string
@@ -21,6 +24,9 @@ export default function Chat() {
   const [threadId, setThreadId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
+  const currentUser = Auth();
+
+
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
@@ -107,7 +113,6 @@ export default function Chat() {
         )}
         {data.resposta && (
           <div>
-            <strong>2Get:</strong>
             <p className="whitespace-pre-wrap">{data.resposta}</p>
           </div>
         )}
@@ -184,27 +189,41 @@ export default function Chat() {
             minWidth: 420,
             minHeight: '60vh'
           }}>
-            {messages.map((m) => {
-              const threadDataAssistant = m.role === 'assistant' ? parseThread(m.text) : null;
-              return (
-                <Alert
-                  variant="primary"
-                  key={m.id}
-                  style={{
-                    backgroundColor: m.role === 'user' ? '#1e293b' :
-                      m.role === 'assistant' ? '#0c55f5ff' : '#3b0820', textAlign: m.role === 'user' ? 'right' : 'left',
-                    color: '#e0e0e0', border: 'none',
-                    maxWidth: '70%', marginLeft: m.role === 'user' ? 'auto' : 0,
-                    marginRight: m.role === 'user' ? 0 : 'auto', marginBottom: 8
-                  }}
-                >
-                  <div>
-                    {threadDataAssistant ? <ThreadDisplay data={threadDataAssistant} /> : m.text}
+            <Container>
+              {messages.map((m) => {
+                const threadDataAssistant = m.role === 'assistant' ? parseThread(m.text) : null;
+                return (
+                  <div
+                    key={m.id}
+                    className={`d-flex ${m.role === 'user' ? 'justify-content-end' : 'justify-content-start'}`}
+                  >
+                    <Row
+                      variant="primary"
+                      className={`d-flex ${m.role === 'user' ? 'flex-row-reverse' : ''}`}
+                      style={{backgroundColor: m.role === 'user' ? '#3a3f5c' : '#2a3357', borderRadius: 20, padding: 10, marginBottom: 15, margin:10, width:"fit-content", maxWidth:"90%"}}
+                    >
+                      <Col xs="auto" className="d-flex align-items-start" style={{ paddingTop: 8, paddingLeft: 8, paddingRight: 0 }}>
+                        {m.role === 'assistant' ? (
+                          <img src={chatFace} width={40} height={40} />
+                        ) : (
+                          <img src={currentUser?.photoURL || "https://via.placeholder.com/120"} width={40} height={40} />
+                        )}
+                      </Col>
+                      <Col xs="auto">
+                        {threadDataAssistant ? (
+                          <div style={{ maxWidth: 600 }}>
+                          <ThreadDisplay data={threadDataAssistant} />
+                          </div>
+                        ) : (
+                          m.text
+                        )}
+                      </Col>
+                    </Row>
                   </div>
-                </Alert>
-              );
-            })}
-            {loading && <Alert variant="light">Gerando sua resposta…</Alert>}
+                );
+              })}
+            </Container>
+            {loading && <Alert variant="light" style={{ textAlign: 'center' }}>Gerando sua resposta…</Alert>}
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <input
