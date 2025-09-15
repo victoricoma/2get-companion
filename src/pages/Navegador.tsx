@@ -3,11 +3,13 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Auth from "../service/Auth";
+import { Link, useNavigate } from "react-router-dom";
 
 
 export default function Navegador() {
 
   const currentUser = Auth();
+  const navigate = useNavigate();
 
 return (
 <>
@@ -32,6 +34,11 @@ return (
                 Onde armezenamos nosso conhecimento?
               </NavDropdown.Item>
             </NavDropdown>
+          </Nav>
+          <Nav className="align-items-center">
+            <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }} className='me-3'>
+              {currentUser?.displayName || "Usuário"}
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
