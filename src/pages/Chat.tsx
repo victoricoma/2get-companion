@@ -5,7 +5,6 @@ import Alert from 'react-bootstrap/Alert';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
 import Navegador from "./Navegador";
 
 type Msg = { id: string; role: "user" | "assistant" | "system"; text: string };
@@ -76,7 +75,7 @@ export default function Chat() {
   const parseThread = (text: string) => {
     try {
       const obj = JSON.parse(text);
-      if (obj && typeof obj === "object" && ("analise" in obj || "rotina_de_atividades" in obj || "message" in obj || "mensagem" in obj)) {
+      if (obj && typeof obj === "object" && ("analise" in obj || "rotina_de_atividades" in obj || "message" in obj || "mensagem" in obj || "resposta" in obj)) {
         return obj;
       }
     } catch {
@@ -104,6 +103,12 @@ export default function Chat() {
           <div>
             <strong>2Get:</strong>
             <p className="whitespace-pre-wrap">{data.mensagem}</p>
+          </div>
+        )}
+        {data.resposta && (
+          <div>
+            <strong>2Get:</strong>
+            <p className="whitespace-pre-wrap">{data.resposta}</p>
           </div>
         )}
         {hasRotina && (
@@ -170,54 +175,53 @@ export default function Chat() {
       </Row>
       <Row>
         <Col>
-          <Card className="text-light" style={{ width: '100%', maxWidth: '1024px', margin: 'auto', height: '80vh' }}>
-            <Card.Body className="d-flex flex-column">
-              <h1 style={{ textAlign: 'center', marginBottom: 12, color: '#e0e0e0' }}>2Get Companion</h1>
-              <div ref={listRef} style={{ flex: '1 1 auto', overflowY: 'auto', 
-                padding: 8, border: '1px solid #2a3357', 
-                borderRadius: 10, marginBottom: 12, 
-                width: 1090, maxWidth: '100%',
-                minWidth: 420,}}>
-                {messages.map((m) => {
-                  const threadDataAssistant = m.role === 'assistant' ? parseThread(m.text) : null;
-                  return (
-                    <Alert
-                      variant="primary"
-                      key={m.id}
-                      style={{
-                        backgroundColor: m.role === 'user' ? '#1e293b' :
-                          m.role === 'assistant' ? '#0c55f5ff' : '#3b0820', textAlign: m.role === 'user' ? 'right' : 'left',
-                        color: '#e0e0e0', border: 'none',
-                        maxWidth: '70%', marginLeft: m.role === 'user' ? 'auto' : 0,
-                        marginRight: m.role === 'user' ? 0 : 'auto', marginBottom: 8
-                      }}
-                    >
-                      <div>
-                        {threadDataAssistant ? <ThreadDisplay data={threadDataAssistant} /> : m.text}
-                      </div>
-                    </Alert>
-                  );
-                })}
-                {loading && <Alert variant="light">Gerando sua resposta…</Alert>}
-              </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKey}
-                  placeholder="Digite sua mensagem…"
-                  style={{ flex: 1 }}
-                />
-                <button
-                  onClick={sendMessage}
-                  disabled={loading || !input.trim()}
-                  className="px-4 py-2 rounded-lg bg-blue-600 text-white disabled:opacity-50"
+          <h1 style={{ textAlign: 'center', marginBottom: 12, color: '#e0e0e0' }}>2Get Companion</h1>
+          <div ref={listRef} style={{
+            flex: '1 1 auto', overflowY: 'auto',
+            padding: 8, border: '1px solid #2a3357',
+            borderRadius: 10, marginBottom: 12,
+            width: 1090, maxWidth: '100%',
+            minWidth: 420,
+            minHeight: '60vh'
+          }}>
+            {messages.map((m) => {
+              const threadDataAssistant = m.role === 'assistant' ? parseThread(m.text) : null;
+              return (
+                <Alert
+                  variant="primary"
+                  key={m.id}
+                  style={{
+                    backgroundColor: m.role === 'user' ? '#1e293b' :
+                      m.role === 'assistant' ? '#0c55f5ff' : '#3b0820', textAlign: m.role === 'user' ? 'right' : 'left',
+                    color: '#e0e0e0', border: 'none',
+                    maxWidth: '70%', marginLeft: m.role === 'user' ? 'auto' : 0,
+                    marginRight: m.role === 'user' ? 0 : 'auto', marginBottom: 8
+                  }}
                 >
-                  Enviar
-                </button>
-              </div>
-            </Card.Body>
-          </Card>
+                  <div>
+                    {threadDataAssistant ? <ThreadDisplay data={threadDataAssistant} /> : m.text}
+                  </div>
+                </Alert>
+              );
+            })}
+            {loading && <Alert variant="light">Gerando sua resposta…</Alert>}
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKey}
+              placeholder="Digite sua mensagem…"
+              style={{ flex: 1 }}
+            />
+            <button
+              onClick={sendMessage}
+              disabled={loading || !input.trim()}
+              className="px-4 py-2 rounded-lg bg-blue-600 text-white disabled:opacity-50"
+            >
+              Enviar
+            </button>
+          </div>
         </Col>
       </Row>
     </Container>
