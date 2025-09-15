@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Banner from "./Banner";
-import Badge from 'react-bootstrap/Badge';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Alert from 'react-bootstrap/Alert';
 
 type Msg = { id: string; role: "user" | "assistant" | "system"; text: string };
 
@@ -8,7 +9,7 @@ const API_URL = "https://2get.icoma.com.br/api/chat";
 
 type Atividade =
   | string
-  | { nome?: string; descricao?: string; justificativa?: string; [key: string]: any };
+  | { nome?: string; descricao?: string; justificativa?: string;[key: string]: any };
 
 export default function Chat() {
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -70,7 +71,7 @@ export default function Chat() {
   const parseThread = (text: string) => {
     try {
       const obj = JSON.parse(text);
-      if (obj && typeof obj === "object" && ("analise" in obj || "rotina_de_atividades" in obj)) {
+      if (obj && typeof obj === "object" && ("analise" in obj || "rotina_de_atividades" in obj || "message" in obj || "mensagem" in obj)) {
         return obj;
       }
     } catch {
@@ -81,11 +82,23 @@ export default function Chat() {
   function ThreadDisplay({ data }: { data: any }) {
     const hasRotina = Array.isArray(data.rotina_de_atividades) && data.rotina_de_atividades.length > 0;
     return (
-      <div className="space-y-3">
+      <div className="space-y-3 p-1">
         {data.analise && (
           <div>
-            <strong>Análise:</strong>
+            <strong>2Get:</strong>
             <p className="whitespace-pre-wrap">{data.analise}</p>
+          </div>
+        )}
+        {data.message && (
+          <div>
+            <strong>2Get:</strong>
+            <p className="whitespace-pre-wrap">{data.message}</p>
+          </div>
+        )}
+        {data.mensagem && (
+          <div>
+            <strong>2Get:</strong>
+            <p className="whitespace-pre-wrap">{data.mensagem}</p>
           </div>
         )}
         {hasRotina && (
@@ -112,7 +125,6 @@ export default function Chat() {
             </ul>
           </div>
         )}
-        {/* Outras seções só aparecem quando há rotina */}
         {hasRotina && data.orientacoes_personalizadas && (
           <div>
             <strong>Orientações:</strong>
@@ -145,28 +157,24 @@ export default function Chat() {
       <h2 className="text-xl font-semibold mb-3 text-slate-200">Chat do Assistant</h2>
       <div ref={listRef} style={{ height: 360, overflow: 'auto', padding: 8, border: '1px solid #2a3357', borderRadius: 10, marginBottom: 12 }}>
         {messages.map((m) => {
-          const threadData = m.role === 'assistant' ? parseThread(m.text) : null;
+          const threadDataAssistant = m.role === 'assistant' ? parseThread(m.text) : null;
           return (
-            <Badge
-              bg="secondary"
+            <Alert
+              variant="primary"
               key={m.id}
-              className={`mb-3 flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              style={{ backgroundColor: m.role === 'user' ? '#1e293b' : 
+                m.role === 'assistant'? '#111827' : '#3b0820', textAlign: m.role === 'user' ? 'right' : 'left',
+                color: '#e0e0e0', border: 'none', 
+                maxWidth: '70%', marginLeft: m.role === 'user' ? 'auto' : 0, 
+                marginRight: m.role === 'user' ? 0 : 'auto', marginBottom: 8}}
             >
-              <div
-                className={`max-w-[75%] whitespace-pre-wrap px-3 py-2 rounded-2xl text-sm leading-relaxed ${
-                  m.role === 'user'
-                    ? 'bg-blue-600 text-white'
-                    : m.role === 'assistant'
-                    ? 'bg-slate-700 text-slate-100'
-                    : 'bg-amber-100 text-amber-900'
-                }`}
-              >
-                {threadData ? <ThreadDisplay data={threadData} /> : m.text}
+              <div>
+                {threadDataAssistant ? <ThreadDisplay data={threadDataAssistant} /> : m.text}
               </div>
-            </Badge>
+            </Alert>
           );
         })}
-        {loading && <div className="text-xs text-slate-400">Gerando sua resposta…</div>}
+        {loading && <Alert variant="light">Gerando sua resposta…</Alert>}
       </div>
       <div style={{ display: 'flex', gap: 8 }}>
         <input
