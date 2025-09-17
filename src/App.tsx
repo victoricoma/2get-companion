@@ -9,43 +9,48 @@ import Repositorio from "./pages/Repositorio";
 import MachineLearning from "./pages/MachineLearning";
 import PorcoEspinho from "./pages/PorcoEspinho";
 import Bowlby from "./pages/Bowlby";
+import Navegador from "./pages/Navegador";
 
 
 export default function App() {
     return (
-        <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/repositorio" element={<Repositorio />} />
-            <Route path="/machinelearning" element={<MachineLearning />} />
-            <Route path="/PorcoEspinho" element={<PorcoEspinho />} />
-            <Route path="/bowlby" element={<Bowlby />} />
-            <Route
-                path="/upload"
-                element={
-                    <AuthGuard>
-                        <UploadAvatar />
-                    </AuthGuard>
-                }
-            />
-            <Route
-                path="/profile"
-                element={
-                    <AuthGuard>
-                        <Profile />
-                    </AuthGuard>
-                }
-            />
-            <Route
-                path="/chat"
-                element={
-                    <AuthGuard>
-                        <Chat />
-                    </AuthGuard>
-                }
-            />
-            <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
+        <>
+        <Navegador />
+            <Routes>
+
+                <Route path="/" element={<Navigate to="/login" replace />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/repositorio" element={<Repositorio />} />
+                <Route path="/machinelearning" element={<MachineLearning />} />
+                <Route path="/PorcoEspinho" element={<PorcoEspinho />} />
+                <Route path="/bowlby" element={<Bowlby />} />
+                <Route
+                    path="/upload"
+                    element={
+                        <AuthGuard>
+                            <UploadAvatar />
+                        </AuthGuard>
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        <AuthGuard>
+                            <Profile />
+                        </AuthGuard>
+                    }
+                />
+                <Route
+                    path="/chat"
+                    element={
+                        <AuthGuard>
+                            <Chat />
+                        </AuthGuard>
+                    }
+                />
+                <Route path="*" element={<Navigate to="/login" replace />} />
+            </Routes>
+        </>
     );
 }

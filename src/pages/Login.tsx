@@ -4,7 +4,6 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase";
 import Banner from "./Banner";
-import Navegador from "./Navegador";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -27,19 +26,19 @@ export default function Login() {
             setError(err.message);
         }
     };
-
-
     return (
         <Container>
             <Row>
-                <Navegador />
-            </Row>
-            <Row>
                 <Col lg="auto" >
-                <Banner />
+                    <Banner />
+                    <Row>
+                        <Col className="text-center mb-3">
+                            <small>2Get Companion &copy; 2025</small>
+                        </Col>
+                    </Row>
                 </Col>
                 <Col>
-                    <div className="card" style={{marginRight: "auto", marginLeft:"auto"}}>
+                    <div className="card" style={{ marginRight: "auto", marginLeft: "auto" }}>
                         <h1>Entre com sua conta:</h1>
                         <form onSubmit={onSubmit} className="form">
                             <input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -52,9 +51,9 @@ export default function Login() {
                 </Col>
             </Row>
             <Row>
-                <img src={infograficoresponsavel} 
-                width={"auto"}
-                height={"auto"} />
+                <img src={infograficoresponsavel}
+                    width={"auto"}
+                    height={"auto"} />
             </Row>
         </Container>
     );

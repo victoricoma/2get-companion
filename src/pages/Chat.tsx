@@ -5,7 +5,6 @@ import Alert from 'react-bootstrap/Alert';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Navegador from "./Navegador";
 import chatFace from '../../public/Chat Face.png';
 import Auth from "../service/Auth";
 
@@ -168,11 +167,6 @@ export default function Chat() {
 
   return (
     <Container fluid className="p-4">
-      <Row>
-        <Col>
-          <Navegador />
-        </Col>
-      </Row>
       <Row>
         <Col>
           <Banner />

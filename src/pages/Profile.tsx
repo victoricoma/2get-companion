@@ -9,6 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Banner from "./Banner";
 import Card from 'react-bootstrap/Card';
+import { Carousel } from "react-bootstrap";
 
 
 export default function Profile() {
@@ -36,7 +37,7 @@ export default function Profile() {
             <Row>
                 <Col>
                     <Banner />
-                    <Card className="text-light" style={{width: '520px'}}>
+                    <Card className="text-light" style={{ width: '520px' }}>
                         <Card.Header>Ficha e Usuário</Card.Header>
                         <img src={user.photoURL || "https://via.placeholder.com/120"} alt="avatar" className="avatar" />
                         <div className="grid">
@@ -62,6 +63,43 @@ export default function Profile() {
                             </button>
                         </div>
                     </Card>
+                </Col>
+            </Row>
+            <Row>
+                <Carousel data-bs-theme="dark">
+                    <Carousel.Item>
+                        <img
+                            className="d-block w-100"
+                            src="/anunciofeira.png"
+                            alt="First slide"
+                        />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <img
+                            className="d-block w-100"
+                            src="/anuncioana.png"
+                            alt="Second slide"
+                        />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <img
+                            className="d-block w-100"
+                            src="/anuncioicoma.png"
+                            alt="Third slide"
+                        />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <img
+                            className="d-block w-100"
+                            src="/anunciolk.png"
+                            alt="Third slide"
+                        />
+                    </Carousel.Item>
+                </Carousel>
+            </Row>
+            <Row>
+                <Col className="text-center mb-3">
+                    <small>2Get Companion &copy; 2025</small>
                 </Col>
             </Row>
         </Container>
