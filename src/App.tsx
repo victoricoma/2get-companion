@@ -6,6 +6,9 @@ import Profile from "./pages/Profile";
 import Chat from './pages/Chat';
 import AuthGuard from "./components/AuthGuard";
 import Repositorio from "./pages/Repositorio";
+import MachineLearning from "./pages/MachineLearning";
+import PorcoEspinho from "./pages/PorcoEspinho";
+import Bowlby from "./pages/Bowlby";
 
 
 export default function App() {
@@ -15,6 +18,9 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/repositorio" element={<Repositorio />} />
+            <Route path="/machinelearning" element={<MachineLearning />} />
+            <Route path="/PorcoEspinho" element={<PorcoEspinho />} />
+            <Route path="/bowlby" element={<Bowlby />} />
             <Route
                 path="/upload"
                 element={
