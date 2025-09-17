@@ -5,6 +5,7 @@ import UploadAvatar from "./pages/UploadAvatar";
 import Profile from "./pages/Profile";
 import Chat from './pages/Chat';
 import AuthGuard from "./components/AuthGuard";
+import Repositorio from "./pages/Repositorio";
 
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/repositorio" element={<Repositorio />} />
             <Route
                 path="/upload"
                 element={
