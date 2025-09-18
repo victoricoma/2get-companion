@@ -6,6 +6,8 @@ import { auth } from "../firebase/firebase";
 import Banner from "./Banner";
 import { Alert, Col, Container, Row } from "react-bootstrap";
 import Carousel from 'react-bootstrap/Carousel';
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase";
 
 
 export default function Register() {
@@ -21,9 +23,21 @@ export default function Register() {
         setError(null);
         try {
             const cred = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(cred.user, { displayName: name });
             if (cred.user) {
-                await updateProfile(cred.user, { displayName: name });
+                await setDoc(doc(db, "conversas", cred.user.uid), {
+                    id: cred.user.uid,
+                    lastLogin: new Date(),
+                    photoURL: cred.user.photoURL,
+                    name: cred.user.displayName,
+                    updatedAt: new Date(),
+                    email: cred.user.email,
+                    messages: [],
+                    threadId: null,
+                    createdAt: new Date()
+                });
                 navigate("/upload", { replace: true });
+
             }
         } catch (err: any) {
             setError(err.message);
@@ -50,13 +64,13 @@ export default function Register() {
                 </Col>
 
             </Row>
-                  <Row>
-        <Alert variant="warning">
-          <Alert.Heading>Importante!</Alert.Heading>
-          <p>As informações fornecidas nesta aplicação são armazenadas em banco de dados e tratadas de acordo com as políticas de segurança e privacidade estabelecidas pela Lei Geral de Proteção de Dados (<a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709.htm">LGPD Lei nº 13.709/2018</a>)
-          </p>
-        </Alert>
-      </Row>
+            <Row>
+                <Alert variant="warning">
+                    <Alert.Heading>Importante!</Alert.Heading>
+                    <p>As informações fornecidas nesta aplicação são armazenadas em banco de dados e tratadas de acordo com as políticas de segurança e privacidade estabelecidas pela Lei Geral de Proteção de Dados (<a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709.htm">LGPD Lei nº 13.709/2018</a>)
+                    </p>
+                </Alert>
+            </Row>
             <Row>
                 <Carousel data-bs-theme="dark">
                     <Carousel.Item>
@@ -80,7 +94,7 @@ export default function Register() {
                             alt="Third slide"
                         />
                     </Carousel.Item>
-                                        <Carousel.Item>
+                    <Carousel.Item>
                         <img
                             className="d-block w-100"
                             src="/anunciolk.png"

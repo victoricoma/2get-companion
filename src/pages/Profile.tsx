@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { auth } from "../firebase/firebase";
@@ -10,15 +10,26 @@ import Col from 'react-bootstrap/Col';
 import Banner from "./Banner";
 import Card from 'react-bootstrap/Card';
 import { Carousel } from "react-bootstrap";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase";
 
 
 export default function Profile() {
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
+    useEffect(() => {
+        if (user) {
+            updateDoc(doc(db, "conversas", user.uid), {
+                lastLogin: new Date(),
+            });
+
+        }
+    }, [user]);
 
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, (u) => setUser(u));
+
         return () => unsub();
     }, []);
 
@@ -39,7 +50,7 @@ export default function Profile() {
                     <Banner />
                 </Col>
                 <Col>
-                    <Card style={{ width: "auto", color:"aliceblue" }}>
+                    <Card style={{ width: "auto", color: "aliceblue" }}>
                         <Card.Header>Ficha e Usuário</Card.Header>
                         <img src={user.photoURL || "https://via.placeholder.com/120"} alt="avatar" className="avatar" />
                         <div className="grid">

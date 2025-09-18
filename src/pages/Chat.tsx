@@ -7,6 +7,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import chatFace from '../../public/Chat Face.png';
 import Auth from "../service/Auth";
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from "../firebase/firebase";
+
 
 type Msg = { id: string; role: "user" | "assistant" | "system"; text: string };
 
@@ -26,6 +29,33 @@ export default function Chat() {
   const currentUser = Auth();
 
 
+  useEffect(() => {
+    async function loadConversation() {
+      if (!currentUser) return;
+
+      const convRef = doc(db, "conversas", currentUser.uid);
+      const convSnap = await getDoc(convRef);
+      if (convSnap.exists()) {
+        const data = convSnap.data();
+        if (data.messages) setMessages(data.messages);
+        if (data.threadId) setThreadId(data.threadId);
+      }
+    }
+    loadConversation();
+  }, [currentUser]);
+
+  useEffect(() => {
+    async function persistConversation() {
+      if (!currentUser) return;
+      const convRef = doc(db, "conversas", currentUser.uid);
+      await setDoc(convRef, {
+        messages,
+        threadId,
+        updatedAt: new Date()
+      });
+    }
+    persistConversation();
+  }, [messages, threadId, currentUser]);
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
@@ -194,7 +224,7 @@ export default function Chat() {
                     <Row
                       variant="primary"
                       className={`d-flex ${m.role === 'user' ? 'flex-row-reverse' : ''}`}
-                      style={{backgroundColor: m.role === 'user' ? '#3a3f5c' : '#2a3357', borderRadius: 20, padding: 10, marginBottom: 15, margin:10, width:"fit-content", maxWidth:"90%"}}
+                      style={{ backgroundColor: m.role === 'user' ? '#3a3f5c' : '#2a3357', borderRadius: 20, padding: 10, marginBottom: 15, margin: 10, width: "fit-content", maxWidth: "90%" }}
                     >
                       <Col xs="auto" className="d-flex align-items-start" style={{ paddingTop: 8, paddingLeft: 8, paddingRight: 0 }}>
                         {m.role === 'assistant' ? (
@@ -206,7 +236,7 @@ export default function Chat() {
                       <Col xs="auto">
                         {threadDataAssistant ? (
                           <div style={{ maxWidth: 600 }}>
-                          <ThreadDisplay data={threadDataAssistant} />
+                            <ThreadDisplay data={threadDataAssistant} />
                           </div>
                         ) : (
                           m.text

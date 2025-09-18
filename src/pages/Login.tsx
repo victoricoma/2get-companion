@@ -9,6 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import infograficoresponsavel from '../../public/infograficorespo1.png';
 
+
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -39,7 +40,7 @@ export default function Login() {
                 </Col>
                 <Col>
                     <div className="card" style={{ marginRight: "auto", marginLeft: "auto" }}>
-                        <h1>Entre com sua conta:</h1>
+                        <h1 style={{ color: "aliceblue" }}>Entre com sua conta:</h1>
                         <form onSubmit={onSubmit} className="form">
                             <input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
                             <input type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} required />

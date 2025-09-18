@@ -7,6 +7,8 @@ import { storage } from "../firebase/firebase";
 import Banner from "./Banner";
 import { Alert, Col, Container, Row } from "react-bootstrap";
 import Carousel from 'react-bootstrap/Carousel';
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase";
 
 
 
@@ -45,6 +47,10 @@ export default function UploadAvatar() {
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
       await updateProfile(auth.currentUser, { photoURL: url });
+      await updateDoc(doc(db, "conversas", auth.currentUser.uid), {
+        photoURL: url,
+        updatedAt: new Date()
+      });
       navigate("/profile", { replace: true });
     } catch (e) {
       console.error(e);
@@ -57,7 +63,7 @@ export default function UploadAvatar() {
 
   return (
     <Container>
-            <Row style={{ padding: "20px" }}>
+      <Row style={{ padding: "20px" }}>
         <Alert variant="light">
           <Alert.Heading>Importante!</Alert.Heading>
           <p>É de extrema importancia o upload de foto, nosso sistema de IA
@@ -68,15 +74,15 @@ export default function UploadAvatar() {
         </Alert>
       </Row>
       <Row className="justify-content-center">
-       <Col>
-       <img src="/exemplo.png" alt="Exemplo de Foto" width={300} height={300}/>
-       </Col>
-       <Col>
-         <p>
-        Este é um bom exemplo de foto que o mediador pode utilizar em seu processo de aprendizagem. Por favor, 
-        use esta referência como guia ao enviar a sua foto de perfil e nos ajude a fortalecer o trabalho do mediador.
-       </p>
-       </Col> 
+        <Col>
+          <img src="/exemplo.png" alt="Exemplo de Foto" width={300} height={300} />
+        </Col>
+        <Col>
+          <p>
+            Este é um bom exemplo de foto que o mediador pode utilizar em seu processo de aprendizagem. Por favor,
+            use esta referência como guia ao enviar a sua foto de perfil e nos ajude a fortalecer o trabalho do mediador.
+          </p>
+        </Col>
       </Row>
       <Row>
         <Col>
