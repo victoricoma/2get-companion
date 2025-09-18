@@ -33,11 +33,13 @@ export default function Profile() {
 
 
     return (
-        <Container fluid className="p-3">
+        <Container>
             <Row>
                 <Col>
                     <Banner />
-                    <Card className="text-light" style={{ width: '520px' }}>
+                </Col>
+                <Col>
+                    <Card style={{ width: "auto", color:"aliceblue" }}>
                         <Card.Header>Ficha e Usuário</Card.Header>
                         <img src={user.photoURL || "https://via.placeholder.com/120"} alt="avatar" className="avatar" />
                         <div className="grid">
@@ -66,7 +68,7 @@ export default function Profile() {
                 </Col>
             </Row>
             <Row>
-                <Carousel data-bs-theme="dark">
+                <Carousel data-bs-theme="dark" className="p-3">
                     <Carousel.Item>
                         <img
                             className="d-block w-100"

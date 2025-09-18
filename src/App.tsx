@@ -10,6 +10,7 @@ import MachineLearning from "./pages/MachineLearning";
 import PorcoEspinho from "./pages/PorcoEspinho";
 import Bowlby from "./pages/Bowlby";
 import Navegador from "./pages/Navegador";
+import Turma from "./pages/Turma";
 
 
 export default function App() {
@@ -23,8 +24,9 @@ export default function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/repositorio" element={<Repositorio />} />
                 <Route path="/machinelearning" element={<MachineLearning />} />
-                <Route path="/PorcoEspinho" element={<PorcoEspinho />} />
+                <Route path="/porcoespinho" element={<PorcoEspinho />} />
                 <Route path="/bowlby" element={<Bowlby />} />
+                <Route path="/turma" element={<Turma />} />
                 <Route
                     path="/upload"
                     element={

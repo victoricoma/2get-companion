@@ -21,7 +21,9 @@ export default function Navegador() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#link">Quem é a turma</Nav.Link>
+              <Nav.Link>
+                <Link to="/turma" style={{ textDecoration: 'none', color: 'inherit' }}>Quem é a Classe?</Link>
+              </Nav.Link>
               <NavDropdown title="Teorias da Base Mediadora" id="basic-nav-dropdown">
                 <NavDropdown.Item>
                   <Link to="/bowlby">
