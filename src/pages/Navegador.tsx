@@ -24,10 +24,13 @@ export default function Navegador() {
               <Nav.Link>
                 <Link to="/turma" style={{ textDecoration: 'none', color: 'inherit' }}>Quem é a Classe?</Link>
               </Nav.Link>
+              <Nav.Link>
+                <Link to="/feira" style={{ textDecoration: 'none', color: 'inherit' }}>Historia da Feira Tecnologica</Link>
+              </Nav.Link>
               <NavDropdown title="Teorias da Base Mediadora" id="basic-nav-dropdown">
                 <NavDropdown.Item>
                   <Link to="/bowlby">
-                  Jhon Bowlby (Teoria do Apego)
+                    Jhon Bowlby (Teoria do Apego)
                   </Link>
                 </NavDropdown.Item>
                 <NavDropdown.Item>
@@ -41,20 +44,20 @@ export default function Navegador() {
                   </Link>
                 </NavDropdown.Item>
                 <NavDropdown.Item>
-                <Link to="/repositorio">
-                  Onde armezenamos nosso conhecimento?
-                </Link>
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-          <Nav className="align-items-center">
-            <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }} className='me-3'>
-              {currentUser?.displayName || "Usuário"}
-            </Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar >
+                  <Link to="/repositorio">
+                    Onde armezenamos nosso conhecimento?
+                  </Link>
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            <Nav className="align-items-center">
+              <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }} className='me-3'>
+                {currentUser?.displayName || "Usuário"}
+              </Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar >
     </>
   );
 }

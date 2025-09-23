@@ -11,6 +11,7 @@ import PorcoEspinho from "./pages/PorcoEspinho";
 import Bowlby from "./pages/Bowlby";
 import Navegador from "./pages/Navegador";
 import Turma from "./pages/Turma";
+import Feira from "./pages/Feira";
 
 
 export default function App() {
@@ -27,6 +28,7 @@ export default function App() {
                 <Route path="/porcoespinho" element={<PorcoEspinho />} />
                 <Route path="/bowlby" element={<Bowlby />} />
                 <Route path="/turma" element={<Turma />} />
+                <Route path="/feira" element={<Feira />} />
                 <Route
                     path="/upload"
                     element={
