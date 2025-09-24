@@ -8,6 +8,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import infograficoresponsavel from '../../public/infograficorespo1.png';
+import Carrossel from "./Carrossel";
+import SiteIcoma from "./SiteIcoma";
 
 
 export default function Login() {
@@ -30,15 +32,11 @@ export default function Login() {
     return (
         <Container>
             <Row>
-                <Col lg="auto" >
-                    <Banner />
-                    <Row>
-                        <Col className="text-center mb-3">
-                            <small>2Get Companion &copy; 2025</small>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col>
+                <Carrossel />
+            </Row>
+            <Row>
+                <Col lg={8}><SiteIcoma /></Col>
+                <Col lg={4}>
                     <div className="card" style={{ marginRight: "auto", marginLeft: "auto" }}>
                         <h1 style={{ color: "aliceblue" }}>Entre com sua conta:</h1>
                         <form onSubmit={onSubmit} className="form">
@@ -49,9 +47,11 @@ export default function Login() {
                         </form>
                         <p>Não tem conta? <Link to="/register">Registre-se</Link></p>
                     </div>
+                    <Banner />
                 </Col>
-            </Row>
-            <Row>
+
+                </Row>
+                <Row>
                 <img src={infograficoresponsavel}
                     width={"auto"}
                     height={"auto"} />

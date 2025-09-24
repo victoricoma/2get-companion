@@ -5,9 +5,10 @@ import { useNavigate, Link } from "react-router-dom";
 import { auth } from "../firebase/firebase";
 import Banner from "./Banner";
 import { Alert, Col, Container, Row } from "react-bootstrap";
-import Carousel from 'react-bootstrap/Carousel';
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
+import Carrossel from "./Carrossel";
+import SiteIcoma from "./SiteIcoma";
 
 
 export default function Register() {
@@ -48,10 +49,19 @@ export default function Register() {
     return (
         <Container>
             <Row>
-                <Col>
-                    <Banner />
+                <Alert variant="warning">
+                    <Alert.Heading>Importante!</Alert.Heading>
+                    <p>As informações fornecidas nesta aplicação são armazenadas em banco de dados e tratadas de acordo
+                        com as políticas de segurança e privacidade estabelecidas pela Lei Geral de Proteção de Dados
+                        (<a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709.htm">LGPD Lei nº 13.709/2018</a>)
+                    </p>
+                </Alert>
+            </Row>
+            <Row>
+                <Col lg={8}>
+                    <SiteIcoma />
                 </Col>
-                <Col>
+                <Col lg={4}>
                     <h1>Registro</h1>
                     <form onSubmit={onSubmit} className="form" >
                         <input type="text" placeholder="Seu nome" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -61,47 +71,11 @@ export default function Register() {
                         <button type="submit">Criar conta</button>
                     </form>
                     <p>Já tem conta? <Link to="/login">Entrar</Link></p>
+                    <Banner />
                 </Col>
-
             </Row>
             <Row>
-                <Alert variant="warning">
-                    <Alert.Heading>Importante!</Alert.Heading>
-                    <p>As informações fornecidas nesta aplicação são armazenadas em banco de dados e tratadas de acordo com as políticas de segurança e privacidade estabelecidas pela Lei Geral de Proteção de Dados (<a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709.htm">LGPD Lei nº 13.709/2018</a>)
-                    </p>
-                </Alert>
-            </Row>
-            <Row>
-                <Carousel data-bs-theme="dark">
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src="/anunciofeira.png"
-                            alt="First slide"
-                        />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src="/anuncioana.png"
-                            alt="Second slide"
-                        />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src="/anuncioicoma.png"
-                            alt="Third slide"
-                        />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src="/anunciolk.png"
-                            alt="Third slide"
-                        />
-                    </Carousel.Item>
-                </Carousel>
+                <Carrossel />
             </Row>
             <Row>
                 <Col className="text-center mb-3">

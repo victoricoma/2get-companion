@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { storage } from "../firebase/firebase";
 import Banner from "./Banner";
 import { Alert, Col, Container, Row } from "react-bootstrap";
-import Carousel from 'react-bootstrap/Carousel';
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
+import Carrossel from "./Carrossel";
 
 
 
@@ -99,36 +99,7 @@ export default function UploadAvatar() {
         </Col>
       </Row>
       <Row>
-        <Carousel data-bs-theme="dark" style={{ padding: "20px" }}>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="/anunciofeira.png"
-              alt="First slide"
-            />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="/anuncioana.png"
-              alt="Second slide"
-            />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="/anuncioicoma.png"
-              alt="Third slide"
-            />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="/anunciolk.png"
-              alt="Third slide"
-            />
-          </Carousel.Item>
-        </Carousel>
+        <Carrossel />
       </Row>
       <Row>
         <Col className="text-center mb-3">
