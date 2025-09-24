@@ -55,12 +55,12 @@ export default function Profile() {
                             <Card style={{ width: '24rem' }}>
                                 <Card.Img variant="top" src={user.photoURL || "https://via.placeholder.com/120"} />
                                 <Card.Body>
-                                    <div className="p-4">
-                                    <Button variant="danger" className="me-4" onClick={logout}>
-                                        Sair da Conta
-                                    </Button>
+                                    <div className="d-grid gap-2 p-4">
                                     <Button variant="info" className="me-4" onClick={() => navigate("/upload")}>
                                         Alterar Foto
+                                    </Button>
+                                    <Button variant="danger" className="me-4" onClick={logout}>
+                                        Sair da Conta
                                     </Button>
                                     </div>
                                     <Card.Text>
