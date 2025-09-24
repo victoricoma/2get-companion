@@ -14,9 +14,7 @@ import anuncio13 from "/outlet.png";
 import anuncio14 from "/pricanetas.png";
 import anuncio15 from "/sincronia.png";
 import anuncio16 from "/tamiresmoraes.png";
-import anuncio17 from "/anuncioicoma.png";
 import anuncio18 from "/anuncioana.png";
-import anuncio19 from "/anunciofeira.png";
 
 import Carousel from 'react-bootstrap/Carousel';
 
